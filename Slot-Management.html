@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slot Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Slot Management System</h1>
+    </header>
+
+    <main>
+      <section class="create-slot">
+        <h2>Create Slot</h2>
+        <form id="slot-form">
+          <label for="slot-title">Title:</label>
+          <input type="text" id="slot-title" required>
+
+          <label for="slot-date">Date:</label>
+          <input type="date" id="slot-date" required>
+
+          <label for="slot-time">Time:</label>
+          <input type="time" id="slot-time" required>
+
+          <label for="recurring">Recurring:</label>
+          <select id="recurring">
+            <option value="no">No</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+          </select>
+
+          <button type="submit">Create Slot</button>
+        </form>
+      </section>
+
+      <section class="slot-list">
+        <h2>Manage Slots</h2>
+        <ul id="slot-list">
+          <!-- Slots will be dynamically added here -->
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // Slot Management Script
+const slotForm = document.getElementById('slot-form');
+const slotList = document.getElementById('slot-list');
+
+let slots = []; // Array to store slot objects
+
+// Add a new slot
+slotForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const title = document.getElementById('slot-title').value;
+  const date = document.getElementById('slot-date').value;
+  const time = document.getElementById('slot-time').value;
+  const recurring = document.getElementById('recurring').value;
+
+  const newSlot = {
+    id: Date.now(),
+    title,
+    date,
+    time,
+    recurring,
+    status: 'Available',
+  };
+
+  slots.push(newSlot);
+  renderSlots();
+  slotForm.reset();
+});
+
+// Render slots on the page
+function renderSlots() {
+  slotList.innerHTML = '';
+
+  slots.forEach((slot) => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <div>
+        <strong>${slot.title}</strong> (${slot.date} at ${slot.time})<br>
+        Recurring: ${slot.recurring} | Status: <span class="status">${slot.status}</span>
+      </div>
+      <div>
+        <button class="edit" onclick="editSlot(${slot.id})">Edit</button>
+        <button class="delete" onclick="deleteSlot(${slot.id})">Delete</button>
+      </div>
+    `;
+    slotList.appendChild(li);
+  });
+}
+
+// Edit a slot
+function editSlot(id) {
+  const slot = slots.find((s) => s.id === id);
+
+  document.getElementById('slot-title').value = slot.title;
+  document.getElementById('slot-date').value = slot.date;
+  document.getElementById('slot-time').value = slot.time;
+  document.getElementById('recurring').value = slot.recurring;
+
+  deleteSlot(id);
+}
+
+// Delete a slot
+function deleteSlot(id) {
+  slots = slots.filter((slot) => slot.id !== id);
+  renderSlots();
+}
+
+// Example: Change slot status
+function updateSlotStatus(id, status) {
+  const slot = slots.find((s) => s.id === id);
+  if (slot) {
+    slot.status = status;
+    renderSlots();
+  }
+}
+
+  </script>
+</body>
+</html>

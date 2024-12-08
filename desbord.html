@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Dashboard</title>
+  <link rel="stylesheet" href="desbord.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="logo">
+        <h2>My Dashboard</h2>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#">Dashboard</a></li>
+		<li><a href="./Slot-Management.html">Slot-Management</a></li>
+        <li><a href="#">Analytics</a></li>
+        <li><a href="#">Meeting Reports</a></li>
+        <li><a href="#">Settings</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h1>Welcome to Your Dashboard</h1>
+        <div class="user-profile">
+          <img src="./asset/man-image.jpeg" alt="User Avatar">
+          <span>Jakir Hossen</span>
+        </div>
+      </div>
+
+      <div class="widgets">
+        <div class="widget">
+          <h3>Meeting</h3>
+          <p>Join now</p>
+        </div>
+        <div class="widget">
+          <h3>Active Meeting</h3>
+          <p>20</p>
+        </div>
+        <div class="widget">
+          <h3>Cancel Meeting</h3>
+          <p>10</p>
+        </div>
+      </div>
+
+      <div class="content-area">
+        <h2>Latest Activity</h2>
+        <p>Details of the latest activity will be displayed here.</p>
+      </div>
+
+      <div class="container">
+        <h1 id="current-time"></h1>
+        <h2 id="current-date"></h2>
+        <h3 id="user-location">Fetching location...</h3>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Function to update the current time and date
+    function updateCurrentTimeAndDate() {
+      const timeElement = document.getElementById("current-time");
+      const dateElement = document.getElementById("current-date");
+      const now = new Date();
+
+      // Format time in 12-hour format with AM/PM
+      let hours = now.getHours();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12; // Convert hour to 12-hour format
+
+      const timeString = `${hours.toString().padStart(2, '0')}:${minutes
+        .toString()
+        .padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${ampm}`;
+      timeElement.innerHTML = `Current Time: ${timeString}`;
+
+      // Format date
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const dateString = now.toLocaleDateString(undefined, options);
+      dateElement.innerHTML = `Current Date: ${dateString}`;
+    }
+
+    // Function to fetch and display the user's location
+    function fetchUserLocation() {
+      const locationElement = document.getElementById("user-location");
+
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            locationElement.innerHTML = `Your Location: Latitude ${latitude.toFixed(
+              2
+            )}, Longitude ${longitude.toFixed(2)}`;
+          },
+          (error) => {
+            locationElement.innerHTML = "Unable to retrieve location.";
+          }
+        );
+      } else {
+        locationElement.innerHTML = "Geolocation not supported by your browser.";
+      }
+    }
+
+    // Call the time, date, and location functions
+    setInterval(updateCurrentTimeAndDate, 1000);
+    updateCurrentTimeAndDate();
+    fetchUserLocation();
+  </script>
+</body>
+</html>
