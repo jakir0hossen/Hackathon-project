@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meeting Scheduler</title>
+  <link rel="stylesheet" href="meeting.css">
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Meeting Scheduler</h1>
+    </header>
+
+    <main>
+      <!-- Video Meeting Form -->
+      <form id="meeting-form" class="form">
+        <div class="form-group">
+          <label for="meeting-title">Meeting Title:</label>
+          <input type="text" id="meeting-title" required placeholder="Enter meeting title">
+        </div>
+
+        <div class="form-group">
+          <label for="meeting-date">Date:</label>
+          <input type="date" id="meeting-date" required>
+        </div>
+
+        <div class="form-group">
+          <label for="meeting-time">Time:</label>
+          <input type="time" id="meeting-time" required>
+        </div>
+
+        <div class="form-group">
+          <label for="meeting-description">Description:</label>
+          <textarea id="meeting-description" placeholder="Enter meeting description"></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary">Schedule Meeting</button>
+      </form>
+
+      <div id="meeting-list" class="meeting-list">
+        <h2>Scheduled Meetings</h2>
+        <ul id="meetings"></ul>
+      </div>
+    </main>
+
+    
+  </div>
+
+
+  <script>
+    // script.js
+
+// Function to create and display a video meeting
+function createMeeting(event) {
+  event.preventDefault(); // Prevent form from submitting
+
+  // Get form input values
+  const title = document.getElementById('meeting-title').value;
+  const date = document.getElementById('meeting-date').value;
+  const time = document.getElementById('meeting-time').value;
+  const description = document.getElementById('meeting-description').value;
+
+  // Check if all fields are filled
+  if (!title || !date || !time) {
+    alert("Please fill all required fields.");
+    return;
+  }
+
+  // Format the meeting date and time
+  const meetingDateTime = `${date} ${time}`;
+
+  // Create a new list item for the meeting
+  const meetingItem = document.createElement('li');
+  meetingItem.innerHTML = `
+    <h3>${title}</h3>
+    <p><strong>Date & Time:</strong> ${meetingDateTime}</p>
+    <p><strong>Description:</strong> ${description || 'No description provided.'}</p>
+    <button class="join-btn" onclick="joinMeeting()">Join Meeting</button>
+  `;
+
+  // Append the new meeting to the meeting list
+  document.getElementById('meetings').appendChild(meetingItem);
+
+  // Reset the form after submission
+  document.getElementById('meeting-form').reset();
+}
+
+// Function to simulate joining the meeting
+function joinMeeting() {
+  alert('Joining the video meeting...'); // Replace this with actual video meeting link
+}
+
+// Attach event listener to the form
+document.getElementById('meeting-form').addEventListener('submit', createMeeting);
+
+  </script>
+
+</body>
+</html>
